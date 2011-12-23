@@ -20,6 +20,25 @@ describe Statefulton::Statefulton do
       end
     end
 
+    describe "#with" do
+      let(:block) do
+        Proc.new do
+          with "instance with stuff" do
+            [1,2]
+          end
+        end
+      end
+
+      it "calls the block when activated" do
+        subject.send("instance with stuff").should == [1,2]
+      end
+
+      it "saves the state of the object" do
+        subject.send("instance with stuff").should == [1,2]
+        subject.instance.should == [1,2]
+      end
+    end
+
     describe "#only" do
       let(:block) do
         Proc.new do
@@ -47,6 +66,15 @@ describe Statefulton::Statefulton do
         it "builds the singular instance" do
           subject.send "one instance"
           subject.send(:instance).should be_a Hash
+        end
+      end
+
+      context "with a block" do
+        subject { Statefulton::Statefulton.new{} }
+        it "calls the block instead of the builder" do
+          subject.instance_eval do
+            build_instance {:ok}.should == :ok
+          end
         end
       end
 

@@ -15,6 +15,13 @@ class Statefulton::Statefulton
     end
   end
 
+  def with string, &block
+    raise "Block required!" unless block_given?
+    define_singleton_method string do
+      build_instance &block
+    end
+  end
+
   def only string
     define_singleton_method string do
       instance or fail "No instance exists!"
@@ -22,8 +29,12 @@ class Statefulton::Statefulton
   end
 
   private
-  def build_instance
+  def build_instance &block
     fail "Instance already created!" unless @instance.nil?
-    @instance = @builder.call
+    @instance = if block_given?
+      block.call
+    else
+      @builder.call
+    end
   end
 end
