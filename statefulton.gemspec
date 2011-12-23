@@ -4,8 +4,8 @@ require File.expand_path('../lib/statefulton/version', __FILE__)
 Gem::Specification.new do |gem|
   gem.authors       = ["Dave Lyon"]
   gem.email         = ["dave@davelyon.net"]
-  gem.description   = %q{TODO: Write a gem description}
-  gem.summary       = %q{TODO: Write a gem summary}
+  gem.description   = %q{A simple utility to manage state when testing}
+  gem.summary       = %q{A simple utility to manage state when testing}
   gem.homepage      = ""
 
   gem.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
