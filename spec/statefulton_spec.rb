@@ -13,12 +13,18 @@ describe "Statefulton" do
         Statefulton :foo do
           builder { Hash.new }
           make "an"
-          only "the one"
+          expects "the one"
         end
       end
       it "returns a statefultons instance" do
         StateOf(:foo, "an").should be_a Hash
         StateOf(:foo, "the one").should be_a Hash
+      end
+    end
+
+    describe "::Reset.alll" do
+      it "calls reset_all! on the builder" do
+        Statefulton::Reset.all.should == true
       end
     end
   end

@@ -1,13 +1,14 @@
 require 'spec_helper'
 
 describe Statefulton::Statefulton do
-  subject { Statefulton::Statefulton.new &block }
+  let(:statefulton) { Statefulton::Statefulton.new &block }
+  subject { statefulton }
 
   describe "Domain Specific Language" do
     describe "#builder" do
-      let(:block) { Proc.new { builder { Object.new} } }
+      let(:block) { Proc.new { builder { Object.new } } }
       it "sets a builder with a block" do
-        subject.builder.should be_an Object
+        subject.instance_variable_get("@builder").should be_a Proc
       end
     end
 
@@ -15,39 +16,69 @@ describe Statefulton::Statefulton do
       let(:block) do
         Proc.new { make "one instance" }
       end
+
       it "defines a singleton method on this instance" do
         subject.should respond_to "one instance"
       end
-    end
 
-    describe "#with" do
-      let(:block) do
-        Proc.new do
-          with "instance with stuff" do
-            [1,2]
+      context "with a block" do
+        let(:block) do
+          Proc.new do
+            make "instance with stuff" do
+              [1,2]
+            end
           end
         end
-      end
 
-      it "calls the block when activated" do
-        subject.send("instance with stuff").should == [1,2]
-      end
+        subject { statefulton.send("instance with stuff") }
 
-      it "saves the state of the object" do
-        subject.send("instance with stuff").should == [1,2]
-        subject.instance.should == [1,2]
+        it "calls the block when activated" do
+          subject.should == [1,2]
+        end
+
+        it "saves the state of the object" do
+          subject.should == [1,2]
+          statefulton.instance.should == [1,2]
+        end
+
+        it "raises if a creation attempt occurs" do
+          expect do
+            subject.send("instance with stuff")
+          end.to raise_error
+        end
       end
     end
 
-    describe "#only" do
+    describe "#expects" do
       let(:block) do
         Proc.new do
           builder { Object.new }
-          only "an instance"
+          expects "an instance"
         end
       end
-      it "defines a singletone method on this instance" do
+
+      it "defines a singleton method on this instance" do
         subject.should respond_to "an instance"
+      end
+
+      it "raises if no instance exists" do
+        expect do
+          subject.send("an instance")
+        end.to raise_error
+      end
+    end
+
+    describe "#reset!" do
+      let(:block) do
+        Proc.new do
+          builder { Hash.new }
+          make "one"
+        end
+      end
+      before { subject.send "one" }
+      it "sets the instance to nil" do
+        subject.reset!
+        subject.instance.should be_nil
       end
     end
   end
@@ -57,7 +88,7 @@ describe Statefulton::Statefulton do
       Proc.new do
         builder { Hash.new }
         make "one instance"
-        only "that instance"
+        expects "that instance"
       end
     end
 

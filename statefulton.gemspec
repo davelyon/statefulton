@@ -2,11 +2,11 @@
 require File.expand_path('../lib/statefulton/version', __FILE__)
 
 Gem::Specification.new do |gem|
-  gem.authors       = ["Dave Lyon"]
-  gem.email         = ["dave@davelyon.net"]
+  gem.authors       = ["Dave Lyon", "Matt Polito"]
+  gem.email         = ["gems@davelyon.net"]
   gem.description   = %q{A simple utility to manage state when testing}
-  gem.summary       = %q{A simple utility to manage state when testing}
-  gem.homepage      = ""
+  gem.summary       = %q{A fancy way to manage state in complex environments. Helpful when in Cucumber with lots of expected state.}
+  gem.homepage      = "https://github.com/davelyon/statefulton"
 
   gem.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   gem.files         = `git ls-files`.split("\n")

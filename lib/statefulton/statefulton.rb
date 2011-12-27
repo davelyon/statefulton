@@ -1,5 +1,5 @@
 class Statefulton::Statefulton
-  attr_reader :builder, :instance
+  attr_reader :instance
 
   def initialize &block
     instance_eval &block
@@ -9,23 +9,20 @@ class Statefulton::Statefulton
     @builder = block
   end
 
-  def make string
-    define_singleton_method string do
-      build_instance
-    end
-  end
-
-  def with string, &block
-    raise "Block required!" unless block_given?
+  def make string, &block
     define_singleton_method string do
       build_instance &block
     end
   end
 
-  def only string
+  def expects string
     define_singleton_method string do
       instance or fail "No instance exists!"
     end
+  end
+
+  def reset!
+    @instance = nil
   end
 
   private
