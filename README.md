@@ -25,6 +25,10 @@ To define a new statefulton:
 
 		make "an" # Calling "an" will make on instance
 
+		with "a hat" do
+			{ hat: "Fedora" }
+		end
+
 		only "that" # Calling "that" will return the singular instance
 	end
 

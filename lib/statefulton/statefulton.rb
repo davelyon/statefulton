@@ -22,10 +22,21 @@ class Statefulton::Statefulton
     end
   end
 
+  def find string, &block
+    raise "Block required!" unless block_given?
+    define_singleton_method string do
+      block.call
+    end
+  end
+
   def only string
     define_singleton_method string do
       instance or fail "No instance exists!"
     end
+  end
+
+  def reset!
+    @instance = nil
   end
 
   private

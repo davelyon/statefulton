@@ -21,5 +21,11 @@ describe "Statefulton" do
         StateOf(:foo, "the one").should be_a Hash
       end
     end
+
+    describe "::Reset.alll" do
+      it "calls reset_all! on the builder" do
+        Statefulton::Reset.all.should == true
+      end
+    end
   end
 end

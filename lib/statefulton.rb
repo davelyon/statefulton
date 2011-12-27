@@ -4,6 +4,11 @@ module Statefulton
   autoload :Builder,      'statefulton/builder'
   autoload :Statefulton,  'statefulton/statefulton'
   State = Builder.instance
+  Reset = Class.new do
+    define_singleton_method :all do
+      Builder.instance.reset_all!
+    end
+  end
 end
 
 

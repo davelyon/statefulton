@@ -46,8 +46,38 @@ describe Statefulton::Statefulton do
           only "an instance"
         end
       end
-      it "defines a singletone method on this instance" do
+      it "defines a singleton method on this instance" do
         subject.should respond_to "an instance"
+      end
+    end
+
+    describe "#find" do
+      let(:block) do
+        Proc.new do
+          find "an instance" do
+            Object.find_newest
+          end
+        end
+      end
+      before do
+        Object.stub(:find_newest).and_return(true)
+      end
+      it "defines a singleton method on this instance" do
+        subject.send("an instance").should == true
+      end
+    end
+
+    describe "#reset!" do
+      let(:block) do
+        Proc.new do
+          builder { Hash.new }
+          make "one"
+        end
+      end
+      before { subject.send "one" }
+      it "sets the instance to nil" do
+        subject.reset!
+        subject.instance.should be_nil
       end
     end
   end
