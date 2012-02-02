@@ -1,6 +1,10 @@
 require "statefulton/version"
 
 module Statefulton
+  module Exceptions
+    class NoInstance     < StandardError; end
+    class InstanceExists < StandardError; end
+  end
   autoload :Builder,      'statefulton/builder'
   autoload :Statefulton,  'statefulton/statefulton'
   State = Builder.instance
@@ -9,6 +13,7 @@ module Statefulton
       Builder.instance.reset_all!
     end
   end
+
 end
 
 def Statefulton(name, &block)

@@ -43,8 +43,9 @@ describe Statefulton::Statefulton do
 
         it "raises if a creation attempt occurs" do
           expect do
-            subject.send("instance with stuff")
-          end.to raise_error
+            subject
+            statefulton.send("instance with stuff")
+          end.to raise_error(Statefulton::Exceptions::InstanceExists)
         end
       end
     end
@@ -64,7 +65,7 @@ describe Statefulton::Statefulton do
       it "raises if no instance exists" do
         expect do
           subject.send("an instance")
-        end.to raise_error
+        end.to raise_error(Statefulton::Exceptions::NoInstance)
       end
     end
 
@@ -114,7 +115,7 @@ describe Statefulton::Statefulton do
           subject.send "one instance"
           expect do
             subject.send "one instance"
-          end.to raise_error "Instance already created!"
+          end.to raise_error Statefulton::Exceptions::InstanceExists
         end
       end
     end
@@ -131,7 +132,7 @@ describe Statefulton::Statefulton do
         it "raises an error" do
           expect do
             subject.send("that instance")
-          end.to raise_error "No instance exists!"
+          end.to raise_error(Statefulton::Exceptions::NoInstance)
         end
       end
     end

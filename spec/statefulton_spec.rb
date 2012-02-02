@@ -22,7 +22,7 @@ describe "Statefulton" do
       end
     end
 
-    describe "::Reset.alll" do
+    describe "::Reset.all" do
       it "calls reset_all! on the builder" do
         Statefulton::Reset.all.should == true
       end

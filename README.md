@@ -32,6 +32,10 @@ Creating a statefulton:
 
 * Statefulton(:name) { # a block of calls to the DSL methods }
 
+Reset state between tests:
+
+* Statefulton::Reset.all
+
 To define a new statefulton:
 
 	Statefulton(:user) do
