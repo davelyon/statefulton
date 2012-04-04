@@ -77,7 +77,7 @@ Statefulton(:user) do
 end
 ```
 
-### What is available for you at this point
+What is available for you at this point
 
 	StateOf(:user, "that") #raise error: instance not created
 	StateOf(:user, "an")   #build the object
