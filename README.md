@@ -4,9 +4,11 @@ A simple interface for the state of objects under test. Useful as an interface a
 
 ## Installation
 
-Add this line to your application's Gemfile:
+Add this line to your application's `Gemfile`:
 
-    gem 'statefulton'
+```ruby
+gem 'statefulton'
+```
 
 And then execute:
 
@@ -16,7 +18,7 @@ Or install it yourself as:
 
     $ gem install statefulton
 
-## Usage
+## How does it work
 
 Defined DSL methods:
 
@@ -26,43 +28,62 @@ Defined DSL methods:
 
 Accessing the state of something:
 
-* StateOf(:name, "context")
+```ruby
+StateOf(:name, "context")
+```
 
 Creating a statefulton:
 
-* Statefulton(:name) { # a block of calls to the DSL methods }
+```ruby
+Statefulton(:name) { # a block of calls to the DSL methods }
+```
 
 Reset state between tests:
 
-* Statefulton::Reset.all
+```ruby
+Statefulton::Reset.all
+```
 
-To define a new statefulton:
+## Cucumber Usage
 
-	Statefulton(:user) do
-	  builder { User.new }
+Define your cucumber feature on `features` or a subdirectory.
 
-	  make "an"
+```ruby
+Given a user
+When I activate that user
+```
 
-	  expects "that" # Calling "that" will return the singular instance
-	end
+Define your steps on `features/steps`
+
+```ruby
+When /^I activate (that user)$/ do |user|
+  user.activate!
+end
+
+Transform /^(a|that) user$/ do |state|
+  StateOf(:user, state)
+end
+```
+
+To define a new statefulton on `features/support/statefulton.rb`:
+
+```ruby
+Statefulton(:user) do
+  builder { User.new }
+
+  make "an"
+
+  expects "that" # Calling "that" will return the singular instance
+end
+```
+
+What is available for you at this point
 
 	StateOf(:user, "that") #raise error: instance not created
 	StateOf(:user, "an")   #build the object
 	StateOf(:user, "an")   #raise error: instance already created
 	StateOf(:user, "that") #get the object
 
-Cucumber Usage:
-
-	Given a user
-	When I activate that user
-
-	Transform /^(a|that) user$/ do |state|
-	  StateOf(:user, state)
-	end
-
-	When /^I activate (that user)$/ do |user|
-	  user.activate!
-	end
 
 ## Contributing
 
